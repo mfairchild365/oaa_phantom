@@ -1,10 +1,18 @@
 var page = require('webpage').create(),
 	system = require('system'),
-	address, standard, reportType, cwd;
+	address, cwd;
 
-if (system.args.length < 2) {
-	console.log('Usage: phantomjs oaa_phantom.js URL');
+if (system.args.length < 2 || system.args.length > 3) {
+	console.log('Usage: phantomjs oaa_phantom.js URL [rule_set=ARIA_STRICT]');
 	phantom.exit();
+}
+
+address = system.args[1];
+
+//Variables:
+var rule_set = 'ARIS_STRICT';
+if(system.args.length == 3) {
+	rule_set = system.args[2];
 }
 
 // Get the absolute working directory from the PWD var and
@@ -30,9 +38,9 @@ page.open(address, function (status) {
 	page.injectJs(cwd + '/oaa/oaa_a11y_rules.js');
 	page.injectJs(cwd + '/oaa/oaa_a11y_rulesets.js');
 
-	var result = page.evaluate(function(){
+	var result = page.evaluate(function(rule_set){
 		// A tools developer wants to use the ARIAStrictRuleset
-		var asRuleset = OpenAjax.a11y.RulesetManager.getRuleset('ARIA_STRICT');
+		var asRuleset = OpenAjax.a11y.RulesetManager.getRuleset(rule_set);
 
 		// then needs to get an evaluatorFactory
 		var evaluatorFactory = OpenAjax.a11y.EvaluatorFactory.newInstance();
@@ -64,7 +72,7 @@ page.open(address, function (status) {
 		str += " NA: " + rs.not_applicable;
 		
 		return str;
-	}, standard);
+	}, rule_set);
 	
 	console.log(result);
 	phantom.exit();
