@@ -10,7 +10,7 @@ if (system.args.length < 2 || system.args.length > 3) {
 address = system.args[1];
 
 //Variables:
-var rule_set = 'ARIS_STRICT';
+var rule_set = 'ARIA_STRICT';
 if(system.args.length == 3) {
 	rule_set = system.args[2];
 }
