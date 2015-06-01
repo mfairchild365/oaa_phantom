@@ -61,35 +61,11 @@ page.open(address, function (status) {
 
 		// perform an evaluation
 		var evaluation_result = evaluator.evaluate(doc, title, url);
-		var rs = evaluation_result.getRuleResultsAll().rule_results_summary;
-
-		var json_result = {
-			date: evaluation_result.date,
-			title: evaluation_result.title,
-			url: evaluation_result.url,
-			rule_results: [],
-			summary: {
-				violations:     rs.violations,
-				warnings:       rs.warnings,
-				manual_checks:  rs.manual_checks,
-				passed:         rs.passed,
-				not_applicable: rs.not_applicable
-			}
-		};
-
-		for (index = 0; index < evaluation_result.rule_results.length; ++index) {
-			var element = evaluation_result.rule_results[index];
-			var details = {
-				implementation_score: element.implementation_score
-			}
-
-			json_result.rule_results.push(details);
-		}
 		
-		return json_result;
+		return evaluation_result.toJSON();
 	}, rule_set);
 	
-	console.log(JSON.stringify(result));
+	console.log(result);
 	phantom.exit();
 });
 
